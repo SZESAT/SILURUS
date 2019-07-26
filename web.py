@@ -1,4 +1,11 @@
 """
+===============================================================================                                      
+==================   ____  _____ _____  ____     _   _____   ==================
+==================  / ___||__  /| ____|/ ___|   / \ |_   _|  ================== 
+==================  \___ \  / / |  _|  \___ \  / _ \  | |    ================== 
+==================   ___) |/ /_ | |___  ___) |/ ___ \ | |    ================== 
+==================  |____//____||_____||____//_/   \_\|_|    ================== 
+==================                                           ==================
 ===============================================================================
 ===================  SILURUS azimuth-eleváció motorvezérlő  ===================
 ===============================================================================
@@ -51,7 +58,7 @@ from flask import Flask, render_template
 # Demo pozíciók
   azimut_demo = [180,120,100,200,200,230,180]
   elevation_demo = [60,60,120,90,135,135,90]
-
+  
 
 # Funkciók definiálása
 #--------------------------------
@@ -75,12 +82,97 @@ def position_set(az,el):
     E[2] = (el-(E[0]*1000+E[1]*100))//10
     E[3] = (el-(E[0]*1000+E[1]*100))%10
     
-    #creating set command
+    # Az értékek kiküldése az eszközre
     set = 0x57, 0x30+H[0], 0x30+H[1], 0x30+H[2], 0x30+H[3], 0x02, 0x30+E[0], 0x30+E[1], 0x30+E[2], 0x30+E[3], 0x02, 0x2F, 0x20
     
     port.write(set)
-    #function ends
+    # Funkció vége
 
+# Az aktuális pozíció kiolvasása
+def position_read():
+
+    global az_real
+    global el_real
+    port.write(read)
+    beolvas = port.read(size = 12)
+    data = struct.unpack('>BBBBBBBBBBBB', beolvas) # Bájt konvertálása unsigned char-á
+
+    # A kapott eredményekből a valós szög számítása fokban
+    az = data[1]*100 + data[2]*10 + data[3] + data[4]/10 -360 
+    el = data[6]*100 + data[7]*10 + data[8] + data[8]/10 -360
+    
+    az_real = az
+    el_real = el
+    
+    az_real = int(az_real)
+    el_real = int(el_real)
+    
+    print(az_real,el_real)
+    # Funkció vége
+
+def demo_futtatas():
+    for i in range(7):
+    position_set(azimut_demo[i],elevation_demo[i])
+    time.sleep(.300)
+    
+    while (azimut_demo[i]!=az_real or elevation_demo[i]!=el_real):
+        position_read()
+        time.sleep(1.000)
+        print(i)
+    #time.sleep(2.500)  
+    # Funkció vége
+
+# Logo kiírása
+  print('''
+ ____  _____ _____  ____     _   _____ 
+/ ___||__  /| ____|/ ___|   / \ |_   _|
+\___ \  / / |  _|  \___ \  / _ \  | |  
+ ___) |/ /_ | |___  ___) |/ ___ \ | |  
+|____//____||_____||____//_/   \_\|_|''' )                                                                               
+
+print("Antenna demo")
+
+# Csatlakozás a soros porton keresztül az eszközhöz
+port= serial.Serial(
+    "/dev/ttyUSB0", 
+    baudrate=600,
+    bytesize=serial.EIGHTBITS, 
+    parity=serial.PARITY_NONE,
+    stopbits=serial.STOPBITS_ONE, 
+    writeTimeout = 0,
+    timeout = 5,
+    rtscts = False,
+    dsrdtr = False,
+    xonxoff = False
+    )
+
+# Port megnyitása
+if port.is_open:
+    port.close()
+port.open()
+
+
+# Megnyitott port kiírása
+print("---< Megnyitott port: " + port.portstr +" >---")
+
+# Pozíció beolvasása
+position_read()
+
+
+ideeeeeeeeeeee  
+
+
+#Port closing----------------------
+if port.is_open:
+    port.close()
+    print("---< Port closed. Exit >---")
+        
+
+
+
+"""
+===================================================================================================
+"""
 
 
 
