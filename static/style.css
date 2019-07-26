@@ -1,0 +1,59 @@
+body {
+    background: white;
+    color: rgb(80,80,80);
+}
+
+.kategoriagomb {
+  background-color: rgb(80,80,80);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width: 200px;
+  margin: 5px;
+  display: inline-block;
+}
+
+.kategoriagomb:hover {
+  background-color: rgb(130,130,130);
+}
+
+.kuldesgomb{
+  background-color: rgb(80,80,80);
+  border: none;
+  color: white;
+  padding: 5px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width: 100px;
+}
+
+.kuldesgomb:hover{
+  background-color: rgb(130,130,130);
+}
+
+.adatbevitel {
+  width: 100px;
+}
+
+.fieldset{
+  vertical-align: top;
+}
+
+.keret-funkcio{
+  width: 870px;
+  margin: 10px;
+  display: inline;
+  vertical-align: top;
+}
+
+.keret-masodik{
+  vertical-align: top;
+  display: inline-block;
+  margin: 10px;
+}
