@@ -43,13 +43,14 @@ import serial
 import struct
 import time
 from flask import Flask, render_template
+app = Flask(__name__)
 
 # Változók rögzítése
 #-------------------------------
 
-# Aktuális állapot kiolvasása a vezérlőből
-  read = 0x57, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x20
-  statusz = 0x57, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x20
+# Aktuális pozíció kiolvasása a vezérlőből
+  #read = 0x57, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x20
+  pozicio = 0x57, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x20
   
 # Stop parancs
   stop = 0x57, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0F, 0x20
@@ -93,7 +94,7 @@ def position_read():
 
     global az_real
     global el_real
-    port.write(read)
+    port.write(pozicio)
     beolvas = port.read(size = 12)
     data = struct.unpack('>BBBBBBBBBBBB', beolvas) # Bájt konvertálása unsigned char-á
 
@@ -121,6 +122,18 @@ def demo_futtatas():
         print(i)
     #time.sleep(2.500)  
     # Funkció vége
+
+# ============================================
+
+# Weboldal indítása
+
+@app.route('/')
+def index():
+    return render_template('index.html', azimuth=az_real, elevacio=el_real)
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
+
 
 # Logo kiírása
   print('''
@@ -158,14 +171,13 @@ print("---< Megnyitott port: " + port.portstr +" >---")
 # Pozíció beolvasása
 position_read()
 
+demo_futtatas()
 
-ideeeeeeeeeeee  
 
-
-#Port closing----------------------
+# Port lezárása, ha a program lefutott
 if port.is_open:
     port.close()
-    print("---< Port closed. Exit >---")
+    print("---< Port lezárva. Kilépés >---")
         
 
 
@@ -176,15 +188,6 @@ if port.is_open:
 
 
 
-app = Flask(__name__)
-
-probaszam = '12fgf'
 
 
 
-@app.route('/')
-def index():
-    return render_template('index.html', probaszam=probaszam)
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
