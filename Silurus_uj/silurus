@@ -1,0 +1,64 @@
+#!/bin/bash
+
+
+echo "$(tput setaf 3)==============================================================================="
+echo "==================   ____  _____ _____  ____     _   _____   =================="
+echo "==================  / ___||__  /| ____|/ ___|   / \ |_   _|  =================="
+echo "==================  \___ \  / / |  _|  \___ \  / _ \  | |    =================="
+echo "==================   ___) |/ /_ | |___  ___) |/ ___ \ | |    =================="
+echo "==================  |____//____||_____||____//_/   \_\|_|    =================="
+echo "==================                                           =================="
+echo "==============================================================================="
+echo "======================  "Silurus" távvezérlő szoftver  =========================="
+echo "===================  a SPID Bigras MD-02 antennavezérlőhöz  ==================="
+echo "===============================================================================$(tput sgr 0)"
+echo ""
+echo "Súgó";
+echo "--------------------";
+echo "Lehetséges funkciók:";
+echo " $(tput setaf 5)t$(tput sgr 0):  /tracking/	Követés Gpredicttel";
+echo " $(tput setaf 5)d$(tput sgr 0):  /demo/	Demó mozgatás futtatása";
+echo " $(tput setaf 5)p$(tput sgr 0):  /park/	Parkoló helyzetbe helyezi az antennát"
+echo " $(tput setaf 5)s$(tput sgr 0):  /service/	Szerelõmód, leengedi a lépcsõ felé"
+echo " $(tput setaf 5)k$(tput sgr 0):  /körbe/	Körbeforgatja az antennát."
+echo ""
+echo "A CTRL+C a folyamatokat megszakítja!"
+echo ""
+echo -n "Funkció: "
+read funkcio
+
+
+if [ $funkcio = "t" ]
+  then
+    gpredict &
+    python3 /home/pi/Desktop/Silurus_uj/Satellite_tracking.py
+fi
+
+if [ $funkcio = "d" ]
+  then 
+    python3 /home/pi/Desktop/Silurus_uj/demo.py
+fi
+
+if [ $funkcio = "p" ]
+  then 
+    python3 /home/pi/Desktop/Silurus_uj/park.py
+fi
+
+if [ $funkcio = "s" ]
+  then 
+    python3 /home/pi/Desktop/Silurus_uj/szerelo.py
+fi
+
+if [ $funkcio = "k" ]
+  then 
+    python3 /home/pi/Desktop/Silurus_uj/korbeforgat.py
+fi
+
+
+echo ""
+echo "$(tput setaf 1)A folyamat lefutott. Szeretnél újat indítani (i/n)?$(tput sgr 0)"
+read vege
+if [ $vege = "i" ]
+  then
+    python3 /home/pi/Desktop/Silurus_uj/silurus
+fi 
