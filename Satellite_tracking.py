@@ -32,7 +32,7 @@ Készítette: Kiss Gábor
 import command
 import config
 import TCP_server
-import keyboard
+
 
 def main():
         
@@ -42,9 +42,9 @@ def main():
     except Exception as e:
         print(e)
 
-    print("Waiting for engage to Gredict")
+    print("Várakozás a Gpredict csatlakozására")
     gpredict.connect(TCP_server.Host,TCP_server.Port)
-    print("Engaged") 
+    print("Csatlakozva") 
 
 
     config.usb_config()
@@ -66,16 +66,16 @@ def main():
         
         
         if data[0] == 'S':
-            print("Connection terminated")
-            print("Waiting for re-engage")
+            print("Kapcsolat megszakadt")
+            print("Várakozás az újracsatlakozásra")
             gpredict.acceptNew()
-            print("Engaged")
+            print("Csatlakozva")
         
         
         if data[0] =="":
-            print("Waiting for connect")
+            print("Várakozás a csatlakozásra")
             gpredict.acceptNew()
-            print("Engaged")
+            print("Csatlakozva")
     
     
         if data[0] =='P':
@@ -89,7 +89,7 @@ def main():
 
             command.position_set(az,el)
             command.position_read()
-            print("sat pos:",az,el)
+            print("muhold pozció(az,el):",az,el)
                   
             
     config.usb_close()
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     
     except KeyboardInterrupt:
         
-        print("Program aborted by Keyborad Interrupt")
+        print("Program megszakítva Keyborad Interrupt által")
 
 
         
