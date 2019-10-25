@@ -1,4 +1,4 @@
-# SILURUS
+# SZESAT SILURUS Projekt
 ## Motorvezérlő (Rotator controller software)
 
 Szoftver a SPID MD azimuth-eleváció motorvezérlőhöz előre beprogramozott funkciókkal.
